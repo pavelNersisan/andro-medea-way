@@ -1,0 +1,21 @@
+<script>
+  $(document).ready(function() {
+    $('#search-form').submit(function(event) {
+      event.preventDefault(); // prevent the form from submitting
+      var query = $('#query').val(); // get the value of the search input
+      var resultsContainer = $('#results'); // select the container for the search results
+      resultsContainer.html('Loading...'); // show a loading message
+      var searchUrl = 'https://scholar.google.com/scholar?q=' + encodeURIComponent(query); // construct the search URL with the search query
+      $.get(searchUrl, function(data) {
+        var searchResults = extractSearchResults(data); // extract the search results from the data
+        if (searchResults.length > 0) {
+          resultsContainer.html(''); // clear the loading message
+          paginateSearchResults(searchResults, resultsContainer); // paginate the search results and display them in the results container
+          createDownloadButton(searchResults); // create a download button for the search results
+        } else {
+          resultsContainer.html('<p>No results found for "' + query + '".</p>'); // display a message if no results were found
+        }
+      });
+    });
+  });
+</script>
